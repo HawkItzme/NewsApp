@@ -1,17 +1,17 @@
 package com.example.newsapp
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.*
-import com.android.volley.toolbox.BasicNetwork
-import com.android.volley.toolbox.DiskBasedCache
-import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.JsonObjectRequest
 import com.example.newsapp.databinding.ActivityMainBinding
-import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity(), NewsItemsClicked {
 
@@ -28,12 +28,15 @@ class MainActivity : AppCompatActivity(), NewsItemsClicked {
         binding.recylerView.adapter = mAdapter
 
         fetchData()
+
+
+
     }
 
     private fun fetchData() {
         //TODO: To avoid crash, i added a try and catch block, just check the logcat for issues without the app crashing.
         try {
-            val url = "https://newsapi.org/v2/top-headlines?country=in&category=business"
+            val url = "https://newsapi.org/v2/top-headlines?country=in&category=science"
             val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(
                 Method.GET, url, null,
                 Response.Listener {
@@ -79,5 +82,8 @@ class MainActivity : AppCompatActivity(), NewsItemsClicked {
     }
 
     override fun onItemClicked(item: News) {
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.build()
+        customTabsIntent.launchUrl(this, Uri.parse(item.url))
     }
 }
